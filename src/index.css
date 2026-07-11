@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+/* ---- Bio-signal design tokens -------------------------------------- */
+@theme {
+  --color-ink: #060911;
+  --color-ink-2: #0a0e17;
+  --color-panel: #0e1420;
+  --color-line: #1b2536;
+  --color-mist: #8ea0bd;
+  --color-signal: #34d399;
+  --color-signal-2: #22d3ee;
+  --color-alert: #fb7185;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-ink);
+  color: #e6edf7;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Aurora + faint grid backdrop */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(60rem 40rem at 12% -10%, rgba(52, 211, 153, 0.12), transparent 60%),
+    radial-gradient(50rem 40rem at 100% 0%, rgba(34, 211, 238, 0.1), transparent 55%),
+    var(--color-ink);
+}
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(140, 160, 190, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(140, 160, 190, 0.045) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: radial-gradient(circle at 50% 30%, #000 0%, transparent 75%);
+}
+
+/* Registered as a utility so it can be used both directly in markup
+   (class="glass") and composed into other classes via @apply. */
+@utility glass {
+  background: color-mix(in oklab, var(--color-panel) 82%, transparent);
+  border: 1px solid var(--color-line);
+  backdrop-filter: blur(8px);
+  border-radius: 1rem;
+}
+
+/* ---- Reusable component classes ------------------------------------ */
+@layer components {
+  .card {
+    background: color-mix(in oklab, var(--color-panel) 82%, transparent);
+    border: 1px solid var(--color-line);
+    backdrop-filter: blur(8px);
+    border-radius: 1rem;
+    @apply p-5 transition-colors;
+  }
+  .card:hover {
+    border-color: color-mix(in oklab, var(--color-signal) 45%, var(--color-line));
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2
+      text-sm font-semibold transition-colors;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--color-signal), var(--color-signal-2));
+    color: #04120c;
+  }
+  .btn-primary:hover {
+    filter: brightness(1.08);
+  }
+  .btn-ghost {
+    @apply border border-[var(--color-line)] text-[var(--color-mist)];
+  }
+  .btn-ghost:hover {
+    @apply text-white border-[var(--color-signal)];
+  }
+  .chip {
+    @apply inline-flex items-center rounded-full border border-[var(--color-line)]
+      px-3 py-1 text-xs font-medium text-[var(--color-mist)];
+  }
+  .chip-active {
+    background: color-mix(in oklab, var(--color-signal) 22%, transparent);
+    @apply border-[var(--color-signal)] text-white;
+  }
+  .input {
+    @apply w-full rounded-lg border border-[var(--color-line)]
+      bg-[var(--color-ink-2)] px-3 py-2 text-sm text-white outline-none
+      placeholder:text-[var(--color-mist)];
+  }
+  .input:focus {
+    border-color: var(--color-signal);
+  }
+  .label {
+    @apply mb-1 block text-xs font-medium text-[var(--color-mist)];
+  }
+  .section-title {
+    @apply text-lg font-semibold tracking-tight text-white;
+  }
+}
+
+/* ECG dash animation for the hero motif */
+@keyframes ecg-dash {
+  to {
+    stroke-dashoffset: -1000;
+  }
+}
+.ecg-line {
+  stroke-dasharray: 12 8;
+  animation: ecg-dash 14s linear infinite;
+}
