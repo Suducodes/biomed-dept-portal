@@ -49,6 +49,19 @@ security, not by hiding the key.
    - **Pin** a notice to keep it at the top.
    - **Emergency** announcements show as a red banner across the whole site.
 
+## Adding more admins (self-serve)
+
+1. The new person signs up themselves at `/#/admin` → *Create account*. Their account exists
+   but can't do anything yet.
+2. An existing admin opens `/#/admin/dashboard` → **Admins** (bottom of the sidebar) → enters
+   their email under *Grant access*. They can sign in as an admin immediately.
+3. **Revoke** works the same way — remove someone's row and their login still works, but they
+   drop back to view-only. You can't revoke your own access (to avoid locking everyone out).
+
+No SQL editor needed for this — it's backed by `grant_admin` / `revoke_admin` / `list_admins`
+functions in [`supabase/schema.sql`](supabase/schema.sql), which check the caller is already an
+admin before doing anything.
+
 ## Deploy to GitHub Pages
 
 1. Push this folder to a new GitHub repo (see below).

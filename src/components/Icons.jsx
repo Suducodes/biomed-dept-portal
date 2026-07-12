@@ -39,4 +39,5 @@ export const icons = {
   upload: "M12 16V4M7 9l5-5 5 5M4 20h16",
   download: "M12 4v12M7 11l5 5 5-5M4 20h16",
   heart: "M3 12h4l2-7 4 14 2-7h6",
+  shield: "M12 2 4 5v6c0 5 3.5 8.5 8 11 4.5-2.5 8-6 8-11V5l-8-3ZM9 12l2 2 4-4",
 };

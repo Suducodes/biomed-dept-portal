@@ -6,6 +6,7 @@ import { useAuth } from "../../lib/auth.jsx";
 import { isLive } from "../../lib/supabase.js";
 import { SCHEMA, TABLE_ORDER } from "./adminSchema.js";
 import RecordForm from "./RecordForm.jsx";
+import ManageAdmins from "./ManageAdmins.jsx";
 import { Icon, icons } from "../../components/Icons.jsx";
 import { Loading, EmptyState, ErrorNote } from "../../components/ui.jsx";
 import { fmtDate } from "../../lib/format.js";
@@ -18,6 +19,7 @@ export default function AdminDashboard() {
   const { rows, loading, error, refresh } = useCollection(table);
 
   const schema = SCHEMA[table];
+  const isAdminsView = table === "admins";
 
   async function handleSubmit(payload) {
     if (editing === "new") await create(table, payload);
@@ -75,11 +77,25 @@ export default function AdminDashboard() {
               <Icon path={SCHEMA[t].icon} size={16} /> {SCHEMA[t].label}
             </button>
           ))}
+          <div className="my-1 border-t border-[var(--color-line)] lg:my-2" />
+          <button
+            onClick={() => switchTable("admins")}
+            className={
+              "flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors " +
+              (isAdminsView
+                ? "bg-[color-mix(in_oklab,var(--color-signal)_18%,transparent)] text-white"
+                : "text-[var(--color-mist)] hover:text-white")
+            }
+          >
+            <Icon path={icons.shield} size={16} /> Admins
+          </button>
         </nav>
 
         {/* Content */}
         <div>
-          {editing ? (
+          {isAdminsView ? (
+            <ManageAdmins />
+          ) : editing ? (
             <div className="card">
               <h2 className="mb-4 text-lg font-semibold text-white">
                 {editing === "new" ? "New" : "Edit"} {schema.label.replace(/s$/, "")}

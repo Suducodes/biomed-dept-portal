@@ -137,3 +137,51 @@ create policy storage_admin_write on storage.objects
   for all
   using (bucket_id in ('posters','attachments','gallery') and public.is_admin())
   with check (bucket_id in ('posters','attachments','gallery') and public.is_admin());
+
+-- ---- Admin management (self-serve, no SQL editor needed) -------------------
+-- Grant/revoke/list run as SECURITY DEFINER so they can read auth.users and
+-- bypass the admins table's own restrictive RLS, but each checks is_admin()
+-- internally so only existing admins can call them.
+
+create or replace function public.list_admins()
+returns table (id uuid, email text, display_name text, created_at timestamptz)
+language sql security definer set search_path = public as $$
+  select id, email, display_name, created_at
+  from public.admins
+  order by created_at;
+$$;
+
+create or replace function public.grant_admin(target_email text, target_display_name text default null)
+returns void
+language plpgsql security definer set search_path = public as $$
+declare
+  target_id uuid;
+begin
+  if not public.is_admin() then
+    raise exception 'Only admins can grant admin access';
+  end if;
+
+  select id into target_id from auth.users where email = target_email;
+  if target_id is null then
+    raise exception 'No account found for %. They must sign up at /#/admin first, then you can grant access.', target_email;
+  end if;
+
+  insert into public.admins (id, email, display_name)
+  values (target_id, target_email, coalesce(nullif(target_display_name, ''), target_email))
+  on conflict (id) do update set display_name = excluded.display_name;
+end;
+$$;
+
+create or replace function public.revoke_admin(target_email text)
+returns void
+language plpgsql security definer set search_path = public as $$
+begin
+  if not public.is_admin() then
+    raise exception 'Only admins can revoke admin access';
+  end if;
+  if target_email = (select email from auth.users where id = auth.uid()) then
+    raise exception 'You cannot revoke your own admin access';
+  end if;
+  delete from public.admins where email = target_email;
+end;
+$$;
