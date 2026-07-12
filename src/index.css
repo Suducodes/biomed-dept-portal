@@ -15,8 +15,9 @@
   --color-signal-2: #22d3ee;
   --color-alert: #fb7185;
   --color-text: #e6edf7;
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-    Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: "Satoshi", "Inter", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: "Clash Display", "Satoshi", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root,
@@ -115,8 +116,8 @@ body::after {
   mask-image: radial-gradient(circle at 50% 30%, #000 0%, transparent 75%);
 }
 @keyframes aurora-shift {
-  0% { background-position: 0 0, 0 0, 0 0; filter: hue-rotate(0deg); }
-  100% { background-position: 4% 3%, -3% 2%, 0 0; filter: hue-rotate(-12deg); }
+  0% { background-position: 0 0, 0 0, 0 0; }
+  100% { background-position: 4% 3%, -3% 2%, 0 0; }
 }
 
 /* ---- Registered utility so it can be @apply'd and used in markup -------- */
@@ -209,11 +210,38 @@ body::after {
     @apply mb-1 block text-xs font-medium text-[var(--color-mist)];
   }
   .section-title {
-    @apply text-lg font-semibold tracking-tight text-[var(--color-text)];
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+    @apply text-lg font-semibold text-[var(--color-text)];
   }
 }
 
 /* ---- Effects ----------------------------------------------------------- */
+
+/* Display typeface for big headings (Clash Display), with tighter tracking. */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* Film-grain overlay — subtle texture, like the portfolio. */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+:root[data-theme="light"] .grain-overlay {
+  opacity: 0.03;
+  mix-blend-mode: multiply;
+}
+
+/* Teal text-glow for hero accents. */
+.text-glow {
+  filter: drop-shadow(0 0 26px color-mix(in oklab, var(--color-signal) 45%, transparent));
+}
 
 /* Scroll reveal (toggled by IntersectionObserver via .in) */
 .reveal {
@@ -302,13 +330,21 @@ body::after {
   animation: soft-pulse 1.8s ease-in-out infinite;
 }
 
-/* ECG hero dash */
-@keyframes ecg-dash {
-  to { stroke-dashoffset: -1000; }
+/* ECG monitor trace — two waveform copies rolling left seamlessly. */
+.ecg-wrap {
+  width: 100%;
+  overflow: hidden;
 }
-.ecg-line {
-  stroke-dasharray: 12 8;
-  animation: ecg-dash 14s linear infinite;
+.ecg-svg {
+  display: block;
+  filter: drop-shadow(0 0 8px color-mix(in oklab, var(--color-signal) 55%, transparent));
+}
+.ecg-roll {
+  animation: ecg-roll 7s linear infinite;
+}
+@keyframes ecg-roll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-1200px); }
 }
 
 /* Respect reduced-motion */

@@ -49,7 +49,7 @@ export function PageHeader({ icon, title, subtitle }) {
         </span>
       )}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)] sm:text-3xl">{title}</h1>
+        <h1 className="font-display text-3xl font-semibold text-[var(--color-text)] sm:text-4xl">{title}</h1>
         {subtitle && <p className="mt-1 text-sm text-[var(--color-mist)]">{subtitle}</p>}
       </div>
     </div>

@@ -66,10 +66,11 @@ export default function Calendar() {
 
       {loading ? (
         <Loading />
+      ) : view === "month" ? (
+        // The month grid always renders — a calendar is useful even when empty.
+        <CalendarGrid events={filtered} />
       ) : filtered.length === 0 ? (
         <EmptyState>No calendar entries.</EmptyState>
-      ) : view === "month" ? (
-        <CalendarGrid events={filtered} />
       ) : (
         <div className="space-y-8">
           {grouped.map(([month, items]) => (

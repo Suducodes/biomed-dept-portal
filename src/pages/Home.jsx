@@ -3,6 +3,7 @@ import { useCollection } from "../lib/useCollection.js";
 import PosterCarousel from "../components/PosterCarousel.jsx";
 import Reveal from "../components/Reveal.jsx";
 import CountUp from "../components/CountUp.jsx";
+import EcgTrace from "../components/EcgTrace.jsx";
 import { Icon, icons } from "../components/Icons.jsx";
 import { Tag } from "../components/ui.jsx";
 import { useSpotlight } from "../lib/useSpotlight.js";
@@ -17,17 +18,16 @@ function Hero({ nextEvent }) {
         style={{ background: "radial-gradient(circle, var(--color-signal), transparent 70%)" }} />
       <div className="pointer-events-none absolute -bottom-24 left-1/3 h-56 w-56 rounded-full opacity-30 blur-3xl"
         style={{ background: "radial-gradient(circle, var(--color-signal-2), transparent 70%)" }} />
-      <svg className="pointer-events-none absolute inset-x-0 bottom-0 h-40 w-full opacity-40" viewBox="0 0 1200 160" preserveAspectRatio="none">
-        <path className="ecg-line" d="M0 100 H250 l30 -70 l40 120 l35 -150 l30 90 l25 -30 H1200"
-          fill="none" stroke="var(--color-signal)" strokeWidth="2.5" />
-      </svg>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 opacity-60">
+        <EcgTrace height={130} />
+      </div>
       <div className="relative max-w-2xl">
         <span className="chip mb-4">
           <span className="pulse-dot mr-2 inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-signal)]" />
           Department of Biomedical Engineering · KPRIET
         </span>
-        <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-[var(--color-text)] sm:text-5xl">
-          The department, <span className="text-gradient">in one place.</span>
+        <h1 className="font-display text-4xl font-bold leading-[1.05] text-[var(--color-text)] sm:text-6xl">
+          The department, <span className="text-gradient text-glow">in one place.</span>
         </h1>
         <p className="mt-4 text-base text-[var(--color-mist)] sm:text-lg">
           Notices, announcements, events, achievements and academic resources —

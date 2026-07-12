@@ -9,6 +9,7 @@ export default function Layout() {
   const location = useLocation();
   return (
     <div className="flex min-h-screen flex-col">
+      <div className="grain-overlay" aria-hidden="true" />
       {!isLive && (
         <div className="bg-[color-mix(in_oklab,var(--color-signal)_16%,transparent)] px-4 py-1.5 text-center text-xs text-[var(--color-signal)]">
           Demo mode — showing sample content. Connect Supabase to go live.
