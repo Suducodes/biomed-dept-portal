@@ -42,7 +42,7 @@ export default function Announcements() {
                       </span>
                       <span className="text-xs text-[var(--color-mist)]">· {relDate(a.published_at)}</span>
                     </div>
-                    <p className="text-sm text-white">{a.message}</p>
+                    <p className="text-sm text-[var(--color-text)]">{a.message}</p>
                     <p className="mt-1 text-xs text-[var(--color-mist)]">{fmtDate(a.published_at)}</p>
                   </div>
                 </div>

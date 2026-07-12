@@ -7,7 +7,7 @@ export default function Footer() {
     <footer className="mt-16 border-t border-[var(--color-line)]">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <div className="mb-3 flex items-center gap-2 text-white">
+          <div className="mb-3 flex items-center gap-2 text-[var(--color-text)]">
             <Icon path={icons.heart} size={20} />
             <span className="font-bold">Biomedical Engineering</span>
           </div>
@@ -18,21 +18,21 @@ export default function Footer() {
         </div>
 
         <div>
-          <h4 className="mb-3 text-sm font-semibold text-white">Quick links</h4>
+          <h4 className="mb-3 text-sm font-semibold text-[var(--color-text)]">Quick links</h4>
           <ul className="space-y-2 text-sm text-[var(--color-mist)]">
-            <li><Link to="/notices" className="hover:text-white">Notices</Link></li>
-            <li><Link to="/events" className="hover:text-white">Events</Link></li>
-            <li><Link to="/downloads" className="hover:text-white">Downloads</Link></li>
-            <li><Link to="/calendar" className="hover:text-white">Academic Calendar</Link></li>
+            <li><Link to="/notices" className="hover:text-[var(--color-text)]">Notices</Link></li>
+            <li><Link to="/events" className="hover:text-[var(--color-text)]">Events</Link></li>
+            <li><Link to="/downloads" className="hover:text-[var(--color-text)]">Downloads</Link></li>
+            <li><Link to="/calendar" className="hover:text-[var(--color-text)]">Academic Calendar</Link></li>
           </ul>
         </div>
 
         <div>
-          <h4 className="mb-3 text-sm font-semibold text-white">Sub-sites</h4>
+          <h4 className="mb-3 text-sm font-semibold text-[var(--color-text)]">Sub-sites</h4>
           <ul className="space-y-2 text-sm text-[var(--color-mist)]">
             {subsites.map((s) => (
               <li key={s.name}>
-                <a href={s.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-white">
+                <a href={s.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-[var(--color-text)]">
                   {s.name} <Icon path={icons.external} size={13} />
                 </a>
               </li>
@@ -41,11 +41,11 @@ export default function Footer() {
         </div>
 
         <div>
-          <h4 className="mb-3 text-sm font-semibold text-white">External</h4>
+          <h4 className="mb-3 text-sm font-semibold text-[var(--color-text)]">External</h4>
           <ul className="space-y-2 text-sm text-[var(--color-mist)]">
-            <li><a href={externalLinks.kprExamCell} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-white">KPR Exam Cell <Icon path={icons.external} size={13} /></a></li>
-            <li><a href={externalLinks.results} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-white">Results <Icon path={icons.external} size={13} /></a></li>
-            <li><a href={externalLinks.college} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-white">College Website <Icon path={icons.external} size={13} /></a></li>
+            <li><a href={externalLinks.kprExamCell} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-[var(--color-text)]">KPR Exam Cell <Icon path={icons.external} size={13} /></a></li>
+            <li><a href={externalLinks.results} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-[var(--color-text)]">Results <Icon path={icons.external} size={13} /></a></li>
+            <li><a href={externalLinks.college} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-[var(--color-text)]">College Website <Icon path={icons.external} size={13} /></a></li>
           </ul>
         </div>
       </div>

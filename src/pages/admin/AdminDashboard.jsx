@@ -48,7 +48,7 @@ export default function AdminDashboard() {
     <div>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-white">Admin Dashboard</h1>
+          <h1 className="text-2xl font-bold text-[var(--color-text)]">Admin Dashboard</h1>
           <p className="text-sm text-[var(--color-mist)]">
             {isLive ? `Signed in${user?.email ? " as " + user.email : ""}` : "Demo mode — changes are not saved"}
           </p>
@@ -70,8 +70,8 @@ export default function AdminDashboard() {
               className={
                 "flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors " +
                 (t === table
-                  ? "bg-[color-mix(in_oklab,var(--color-signal)_18%,transparent)] text-white"
-                  : "text-[var(--color-mist)] hover:text-white")
+                  ? "bg-[color-mix(in_oklab,var(--color-signal)_18%,transparent)] text-[var(--color-text)]"
+                  : "text-[var(--color-mist)] hover:text-[var(--color-text)]")
               }
             >
               <Icon path={SCHEMA[t].icon} size={16} /> {SCHEMA[t].label}
@@ -83,8 +83,8 @@ export default function AdminDashboard() {
             className={
               "flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors " +
               (isAdminsView
-                ? "bg-[color-mix(in_oklab,var(--color-signal)_18%,transparent)] text-white"
-                : "text-[var(--color-mist)] hover:text-white")
+                ? "bg-[color-mix(in_oklab,var(--color-signal)_18%,transparent)] text-[var(--color-text)]"
+                : "text-[var(--color-mist)] hover:text-[var(--color-text)]")
             }
           >
             <Icon path={icons.shield} size={16} /> Admins
@@ -97,7 +97,7 @@ export default function AdminDashboard() {
             <ManageAdmins />
           ) : editing ? (
             <div className="card">
-              <h2 className="mb-4 text-lg font-semibold text-white">
+              <h2 className="mb-4 text-lg font-semibold text-[var(--color-text)]">
                 {editing === "new" ? "New" : "Edit"} {schema.label.replace(/s$/, "")}
               </h2>
               <RecordForm schema={schema} record={editing === "new" ? null : editing} onSubmit={handleSubmit} onCancel={() => setEditing(null)} />
@@ -121,7 +121,7 @@ export default function AdminDashboard() {
                   {rows.map((r) => (
                     <div key={r.id} className="card flex items-center gap-3 !py-3">
                       <div className="min-w-0 flex-1">
-                        <p className="truncate font-medium text-white">{r[schema.titleField] || "(untitled)"}</p>
+                        <p className="truncate font-medium text-[var(--color-text)]">{r[schema.titleField] || "(untitled)"}</p>
                         <p className="text-xs text-[var(--color-mist)]">
                           {[r.category, r.type, r.severity].filter(Boolean).join(" · ")}
                           {r.published_at && ` · ${fmtDate(r.published_at)}`}

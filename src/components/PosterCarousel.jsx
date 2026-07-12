@@ -32,7 +32,7 @@ export default function PosterCarousel({ items = [], interval = 5000 }) {
       </div>
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent p-4">
         <p className="text-sm font-semibold text-white">{item.title}</p>
-        {item.caption && <p className="text-xs text-[var(--color-mist)]">{item.caption}</p>}
+        {item.caption && <p className="text-xs text-white/70">{item.caption}</p>}
       </div>
       {n > 1 && (
         <div className="absolute right-3 top-3 flex gap-1.5">

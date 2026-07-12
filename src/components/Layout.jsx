@@ -1,10 +1,12 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Nav from "./Nav.jsx";
 import Footer from "./Footer.jsx";
 import EmergencyBanner from "./EmergencyBanner.jsx";
+import ScrollTop from "./ScrollTop.jsx";
 import { isLive } from "../lib/supabase.js";
 
 export default function Layout() {
+  const location = useLocation();
   return (
     <div className="flex min-h-screen flex-col">
       {!isLive && (
@@ -15,9 +17,13 @@ export default function Layout() {
       <Nav />
       <EmergencyBanner />
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8">
-        <Outlet />
+        {/* keyed wrapper replays the enter animation on each route change */}
+        <div key={location.pathname} className="page-enter">
+          <Outlet />
+        </div>
       </main>
       <Footer />
+      <ScrollTop />
     </div>
   );
 }

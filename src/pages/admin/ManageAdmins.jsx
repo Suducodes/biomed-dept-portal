@@ -81,7 +81,7 @@ export default function ManageAdmins() {
       </div>
 
       <div className="card mb-6">
-        <h3 className="mb-3 text-sm font-semibold text-white">Grant access</h3>
+        <h3 className="mb-3 text-sm font-semibold text-[var(--color-text)]">Grant access</h3>
         <p className="mb-3 text-xs text-[var(--color-mist)]">
           The person must already have an account — they sign up at{" "}
           <code className="text-[var(--color-signal)]">/#/admin</code> first, then you promote
@@ -118,7 +118,7 @@ export default function ManageAdmins() {
                   <Icon path={icons.shield} size={18} />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium text-white">
+                  <p className="truncate font-medium text-[var(--color-text)]">
                     {a.display_name || a.email} {isSelf && <span className="text-xs text-[var(--color-mist)]">(you)</span>}
                   </p>
                   <p className="text-xs text-[var(--color-mist)]">{a.email} · admin since {fmtDate(a.created_at)}</p>

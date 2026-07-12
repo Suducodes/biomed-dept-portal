@@ -1,6 +1,10 @@
 @import "tailwindcss";
 
-/* ---- Bio-signal design tokens -------------------------------------- */
+/* ============================================================================
+   Bio-signal design system — theme-aware (dark default, light override).
+   Tailwind v4 emits the @theme vars at :root; the [data-theme] blocks below
+   override them at runtime (set by the no-FOUC script in index.html).
+   ========================================================================== */
 @theme {
   --color-ink: #060911;
   --color-ink-2: #0a0e17;
@@ -10,12 +14,54 @@
   --color-signal: #34d399;
   --color-signal-2: #22d3ee;
   --color-alert: #fb7185;
+  --color-text: #e6edf7;
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, Helvetica, Arial, sans-serif;
 }
 
-:root {
+:root,
+:root[data-theme="dark"] {
   color-scheme: dark;
+  --color-ink: #060911;
+  --color-ink-2: #0a0e17;
+  --color-panel: #0e1420;
+  --color-line: #1b2536;
+  --color-mist: #8ea0bd;
+  --color-signal: #34d399;
+  --color-signal-2: #22d3ee;
+  --color-alert: #fb7185;
+  --color-text: #e6edf7;
+
+  --aurora-1: rgba(52, 211, 153, 0.14);
+  --aurora-2: rgba(34, 211, 238, 0.12);
+  --grid-line: rgba(140, 160, 190, 0.05);
+  --glass-bg: color-mix(in oklab, var(--color-panel) 82%, transparent);
+  --glass-hi: rgba(255, 255, 255, 0.04);
+  --card-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset,
+    0 10px 30px -12px rgba(0, 0, 0, 0.6);
+  --glow: 0 0 24px -4px color-mix(in oklab, var(--color-signal) 60%, transparent);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-ink: #eef2f9;
+  --color-ink-2: #ffffff;
+  --color-panel: #ffffff;
+  --color-line: #dbe4f1;
+  --color-mist: #566581;
+  --color-signal: #0d9c6b;
+  --color-signal-2: #0891b2;
+  --color-alert: #e11d48;
+  --color-text: #0e1a2b;
+
+  --aurora-1: rgba(13, 156, 107, 0.12);
+  --aurora-2: rgba(8, 145, 178, 0.1);
+  --grid-line: rgba(30, 55, 95, 0.06);
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-hi: rgba(255, 255, 255, 0.6);
+  --card-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset,
+    0 12px 28px -16px rgba(20, 40, 80, 0.35);
+  --glow: 0 0 24px -6px color-mix(in oklab, var(--color-signal) 45%, transparent);
 }
 
 html,
@@ -27,21 +73,35 @@ body,
 body {
   margin: 0;
   background: var(--color-ink);
-  color: #e6edf7;
+  color: var(--color-text);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.4s ease, color 0.3s ease;
 }
 
-/* Aurora + faint grid backdrop */
+/* Smooth the theme switch across the main surfaces. */
+header,
+footer,
+.card,
+.glass,
+.input,
+.btn,
+.chip {
+  transition: background-color 0.35s ease, border-color 0.35s ease,
+    color 0.25s ease, box-shadow 0.25s ease, transform 0.18s ease;
+}
+
+/* Aurora + drifting grid backdrop */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: -2;
   background:
-    radial-gradient(60rem 40rem at 12% -10%, rgba(52, 211, 153, 0.12), transparent 60%),
-    radial-gradient(50rem 40rem at 100% 0%, rgba(34, 211, 238, 0.1), transparent 55%),
+    radial-gradient(60rem 40rem at 12% -10%, var(--aurora-1), transparent 60%),
+    radial-gradient(50rem 40rem at 100% 0%, var(--aurora-2), transparent 55%),
     var(--color-ink);
+  animation: aurora-shift 24s ease-in-out infinite alternate;
 }
 body::after {
   content: "";
@@ -49,81 +109,219 @@ body::after {
   inset: 0;
   z-index: -1;
   background-image:
-    linear-gradient(rgba(140, 160, 190, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(140, 160, 190, 0.045) 1px, transparent 1px);
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 46px 46px;
   mask-image: radial-gradient(circle at 50% 30%, #000 0%, transparent 75%);
 }
+@keyframes aurora-shift {
+  0% { background-position: 0 0, 0 0, 0 0; filter: hue-rotate(0deg); }
+  100% { background-position: 4% 3%, -3% 2%, 0 0; filter: hue-rotate(-12deg); }
+}
 
-/* Registered as a utility so it can be used both directly in markup
-   (class="glass") and composed into other classes via @apply. */
+/* ---- Registered utility so it can be @apply'd and used in markup -------- */
 @utility glass {
-  background: color-mix(in oklab, var(--color-panel) 82%, transparent);
+  background: var(--glass-bg);
   border: 1px solid var(--color-line);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
   border-radius: 1rem;
 }
 
-/* ---- Reusable component classes ------------------------------------ */
+/* ---- Component classes ------------------------------------------------- */
 @layer components {
   .card {
-    background: color-mix(in oklab, var(--color-panel) 82%, transparent);
+    position: relative;
+    background: var(--glass-bg);
     border: 1px solid var(--color-line);
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(10px);
     border-radius: 1rem;
-    @apply p-5 transition-colors;
+    box-shadow: var(--card-shadow);
+    @apply p-5;
   }
   .card:hover {
     border-color: color-mix(in oklab, var(--color-signal) 45%, var(--color-line));
+    transform: translateY(-3px);
+    box-shadow: var(--card-shadow), var(--glow);
   }
+  /* Opt-out for cards that shouldn't lift (grid cells, list rows) */
+  .card-flat:hover {
+    transform: none;
+  }
+
   .btn {
+    position: relative;
+    overflow: hidden;
     @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2
-      text-sm font-semibold transition-colors;
+      text-sm font-semibold;
+  }
+  .btn:active {
+    transform: translateY(1px) scale(0.99);
+  }
+  /* Shimmer sweep */
+  .btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 30%,
+      rgba(255, 255, 255, 0.25) 50%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform 0.6s ease;
+  }
+  .btn:hover::after {
+    transform: translateX(120%);
   }
   .btn-primary {
     background: linear-gradient(135deg, var(--color-signal), var(--color-signal-2));
     color: #04120c;
+    box-shadow: 0 6px 18px -8px color-mix(in oklab, var(--color-signal) 70%, transparent);
   }
   .btn-primary:hover {
-    filter: brightness(1.08);
+    filter: brightness(1.07);
   }
   .btn-ghost {
     @apply border border-[var(--color-line)] text-[var(--color-mist)];
   }
   .btn-ghost:hover {
-    @apply text-white border-[var(--color-signal)];
+    @apply text-[var(--color-text)] border-[var(--color-signal)];
   }
   .chip {
     @apply inline-flex items-center rounded-full border border-[var(--color-line)]
       px-3 py-1 text-xs font-medium text-[var(--color-mist)];
   }
+  .chip:hover {
+    border-color: color-mix(in oklab, var(--color-signal) 55%, var(--color-line));
+    color: var(--color-text);
+  }
   .chip-active {
     background: color-mix(in oklab, var(--color-signal) 22%, transparent);
-    @apply border-[var(--color-signal)] text-white;
+    @apply border-[var(--color-signal)] text-[var(--color-text)];
   }
   .input {
     @apply w-full rounded-lg border border-[var(--color-line)]
-      bg-[var(--color-ink-2)] px-3 py-2 text-sm text-white outline-none
+      bg-[var(--color-ink-2)] px-3 py-2 text-sm text-[var(--color-text)] outline-none
       placeholder:text-[var(--color-mist)];
   }
   .input:focus {
     border-color: var(--color-signal);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-signal) 22%, transparent);
   }
   .label {
     @apply mb-1 block text-xs font-medium text-[var(--color-mist)];
   }
   .section-title {
-    @apply text-lg font-semibold tracking-tight text-white;
+    @apply text-lg font-semibold tracking-tight text-[var(--color-text)];
   }
 }
 
-/* ECG dash animation for the hero motif */
+/* ---- Effects ----------------------------------------------------------- */
+
+/* Scroll reveal (toggled by IntersectionObserver via .in) */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Per-page enter animation */
+.page-enter {
+  animation: pageIn 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Cursor-follow spotlight (JS sets --mx/--my as % of the element) */
+.spotlight {
+  position: relative;
+  overflow: hidden;
+}
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    22rem 22rem at var(--mx, 50%) var(--my, 0%),
+    color-mix(in oklab, var(--color-signal) 22%, transparent),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+/* Animated gradient text */
+.text-gradient {
+  background: linear-gradient(100deg, var(--color-signal), var(--color-signal-2), var(--color-signal));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-pan 6s linear infinite;
+}
+@keyframes gradient-pan {
+  to { background-position: 200% center; }
+}
+
+/* Skeleton shimmer */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in oklab, var(--color-panel) 70%, transparent);
+  border-radius: 0.6rem;
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent,
+    color-mix(in oklab, var(--color-mist) 22%, transparent), transparent);
+  animation: shimmer 1.4s infinite;
+}
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+/* Soft pulse for "live"/emergency accents */
+@keyframes soft-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+.pulse-dot {
+  animation: soft-pulse 1.8s ease-in-out infinite;
+}
+
+/* ECG hero dash */
 @keyframes ecg-dash {
-  to {
-    stroke-dashoffset: -1000;
-  }
+  to { stroke-dashoffset: -1000; }
 }
 .ecg-line {
   stroke-dasharray: 12 8;
   animation: ecg-dash 14s linear infinite;
+}
+
+/* Respect reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
 }

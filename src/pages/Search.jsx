@@ -53,7 +53,7 @@ export default function SearchPage() {
                 <Icon path={r.icon} size={18} />
               </span>
               <div className="min-w-0 flex-1">
-                <p className="truncate font-medium text-white">{r.title}</p>
+                <p className="truncate font-medium text-[var(--color-text)]">{r.title}</p>
                 <div className="mt-0.5 flex items-center gap-2">
                   <Tag>{r.kind}</Tag>
                   <span className="text-xs text-[var(--color-mist)]">{r.meta} · {fmtDate(r.date)}</span>

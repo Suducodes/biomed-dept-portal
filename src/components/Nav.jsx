@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { Icon, icons } from "./Icons.jsx";
+import ThemeToggle from "./ThemeToggle.jsx";
 
 const links = [
   { to: "/notices", label: "Notices" },
@@ -19,8 +20,8 @@ export default function Nav() {
   const linkClass = ({ isActive }) =>
     "rounded-lg px-3 py-2 text-sm font-medium transition-colors " +
     (isActive
-      ? "text-white bg-[color-mix(in_oklab,var(--color-signal)_18%,transparent)]"
-      : "text-[var(--color-mist)] hover:text-white");
+      ? "text-[var(--color-text)] bg-[color-mix(in_oklab,var(--color-signal)_18%,transparent)]"
+      : "text-[var(--color-mist)] hover:text-[var(--color-text)]");
 
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--color-line)] bg-[color-mix(in_oklab,var(--color-ink)_88%,transparent)] backdrop-blur">
@@ -30,7 +31,7 @@ export default function Nav() {
             <Icon path={icons.heart} size={22} />
           </span>
           <span className="leading-tight">
-            <span className="block text-sm font-bold text-white">Biomedical Engineering</span>
+            <span className="block text-sm font-bold text-[var(--color-text)]">Biomedical Engineering</span>
             <span className="block text-[11px] text-[var(--color-mist)]">Department Portal · KPRIET</span>
           </span>
         </Link>
@@ -44,6 +45,7 @@ export default function Nav() {
         </nav>
 
         <div className="ml-auto flex items-center gap-2 lg:ml-2">
+          <ThemeToggle />
           <Link to="/search" className="btn btn-ghost !px-2.5" aria-label="Search">
             <Icon path={icons.search} size={18} />
           </Link>

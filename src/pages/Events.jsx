@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
 import { useCollection } from "../lib/useCollection.js";
 import { PageHeader, CategoryFilter, Loading, EmptyState, ErrorNote, Tag } from "../components/ui.jsx";
+import Reveal from "../components/Reveal.jsx";
 import { Icon, icons } from "../components/Icons.jsx";
-import { fmtDate, relDate, label } from "../lib/format.js";
+import { fmtDate, relDate, countdown, label } from "../lib/format.js";
 
 const TYPES = ["symposium", "workshop", "guest_lecture", "conference", "competition"].map((v) => ({
   value: v,
@@ -14,8 +15,13 @@ function EventCard({ e }) {
   return (
     <article className="card overflow-hidden !p-0">
       {e.poster_url && (
-        <div className="aspect-[16/9] w-full overflow-hidden border-b border-[var(--color-line)]">
-          <img src={e.poster_url} alt={e.title} className="h-full w-full object-cover" />
+        <div className="relative aspect-[16/9] w-full overflow-hidden border-b border-[var(--color-line)]">
+          <img src={e.poster_url} alt={e.title} className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
+          {upcoming && countdown(e.event_date) && (
+            <span className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur">
+              <Icon path={icons.clock} size={12} /> {countdown(e.event_date)}
+            </span>
+          )}
         </div>
       )}
       <div className="p-5">
@@ -23,7 +29,7 @@ function EventCard({ e }) {
           <Tag tone="signal">{label("type", e.type)}</Tag>
           <Tag tone={upcoming ? "signal" : "default"}>{upcoming ? "Upcoming" : "Past"}</Tag>
         </div>
-        <h3 className="text-base font-semibold text-white">{e.title}</h3>
+        <h3 className="text-base font-semibold text-[var(--color-text)]">{e.title}</h3>
         <p className="mt-1 text-sm text-[var(--color-mist)]">{e.description}</p>
         <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-[var(--color-mist)]">
           <span className="inline-flex items-center gap-1"><Icon path={icons.calendar} size={14} /> {fmtDate(e.event_date)} · {relDate(e.event_date)}</span>
@@ -67,7 +73,11 @@ export default function Events() {
             <section>
               <h2 className="section-title mb-3">Upcoming</h2>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {upcoming.map((e) => <EventCard key={e.id} e={e} />)}
+                {upcoming.map((e, i) => (
+                  <Reveal key={e.id} delay={Math.min(i, 6) * 60}>
+                    <EventCard e={e} />
+                  </Reveal>
+                ))}
               </div>
             </section>
           )}
@@ -75,7 +85,11 @@ export default function Events() {
             <section>
               <h2 className="section-title mb-3">Past</h2>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {past.map((e) => <EventCard key={e.id} e={e} />)}
+                {past.map((e, i) => (
+                  <Reveal key={e.id} delay={Math.min(i, 6) * 60}>
+                    <EventCard e={e} />
+                  </Reveal>
+                ))}
               </div>
             </section>
           )}

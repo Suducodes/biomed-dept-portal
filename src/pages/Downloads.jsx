@@ -44,7 +44,7 @@ export default function Downloads() {
                 <Icon path={icons.doc} size={22} />
               </span>
               <div className="min-w-0 flex-1">
-                <p className="truncate font-medium text-white">{d.title}</p>
+                <p className="truncate font-medium text-[var(--color-text)]">{d.title}</p>
                 <div className="mt-0.5 flex items-center gap-2">
                   <Tag>{label("category", d.category)}</Tag>
                   <span className="text-xs text-[var(--color-mist)]">{fmtDate(d.uploaded_at)}</span>

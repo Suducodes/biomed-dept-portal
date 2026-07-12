@@ -31,7 +31,7 @@ export default function Exams() {
               <Icon path={l.icon} size={24} />
             </span>
             <div>
-              <p className="flex items-center gap-1 font-semibold text-white">{l.title} <Icon path={icons.external} size={13} /></p>
+              <p className="flex items-center gap-1 font-semibold text-[var(--color-text)]">{l.title} <Icon path={icons.external} size={13} /></p>
               <p className="text-sm text-[var(--color-mist)]">{l.desc}</p>
             </div>
           </a>
@@ -47,7 +47,7 @@ export default function Exams() {
             <div key={e.id} className="card flex items-center gap-3 !py-3">
               <Icon path={icons.calendar} size={18} />
               <div className="flex-1">
-                <span className="font-medium text-white">{e.title}</span>
+                <span className="font-medium text-[var(--color-text)]">{e.title}</span>
                 {e.description && <span className="ml-2 text-sm text-[var(--color-mist)]">{e.description}</span>}
               </div>
               <Tag tone="signal">{fmtDate(e.date)}</Tag>

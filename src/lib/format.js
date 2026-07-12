@@ -60,3 +60,24 @@ export const LABELS = {
 };
 
 export const label = (group, key) => LABELS[group]?.[key] ?? key;
+
+// True if a date is within the last `days` (default 3) — for "NEW" badges.
+export function isNew(iso, days = 3) {
+  if (!iso) return false;
+  const diff = Date.now() - new Date(iso).getTime();
+  return diff >= 0 && diff < days * 86400000;
+}
+
+// Compact countdown to a future date, e.g. "in 3d 4h". Empty if past.
+export function countdown(iso) {
+  if (!iso) return "";
+  let ms = new Date(iso).getTime() - Date.now();
+  if (ms <= 0) return "";
+  const d = Math.floor(ms / 86400000);
+  ms -= d * 86400000;
+  const h = Math.floor(ms / 3600000);
+  if (d > 0) return `in ${d}d ${h}h`;
+  ms -= h * 3600000;
+  const m = Math.floor(ms / 60000);
+  return h > 0 ? `in ${h}h ${m}m` : `in ${m}m`;
+}

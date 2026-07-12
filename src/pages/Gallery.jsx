@@ -62,7 +62,7 @@ export default function Gallery() {
             <img src={active.media_url} alt={active.title} className="max-h-[75vh] w-full object-contain" />
             <div className="flex items-center justify-between p-4">
               <div>
-                <p className="font-semibold text-white">{active.title}</p>
+                <p className="font-semibold text-[var(--color-text)]">{active.title}</p>
                 <p className="text-xs text-[var(--color-mist)]">{label("type", active.type)}</p>
               </div>
               <button className="btn btn-ghost !px-2.5" onClick={() => setActive(null)} aria-label="Close">

@@ -103,7 +103,7 @@ export default function RecordForm({ schema, record, onSubmit, onCancel }) {
           )}
 
           {f.type === "checkbox" && (
-            <label className="flex items-center gap-2 text-sm text-white">
+            <label className="flex items-center gap-2 text-sm text-[var(--color-text)]">
               <input type="checkbox" checked={!!values[f.name]} onChange={(e) => set(f.name, e.target.checked)} />
               {f.label || f.name}
             </label>

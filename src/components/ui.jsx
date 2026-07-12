@@ -1,4 +1,43 @@
+import { useEffect } from "react";
 import { Icon, icons } from "./Icons.jsx";
+
+// Centered modal dialog with backdrop blur + scale-in. Closes on backdrop
+// click or Escape.
+export function Modal({ open, onClose, title, children }) {
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => e.key === "Escape" && onClose();
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [open, onClose]);
+
+  if (!open) return null;
+  return (
+    <div
+      className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4 backdrop-blur-sm"
+      onClick={onClose}
+      style={{ animation: "pageIn .2s ease" }}
+    >
+      <div
+        className="glass max-h-[85vh] w-full max-w-lg overflow-y-auto p-6"
+        onClick={(e) => e.stopPropagation()}
+        style={{ animation: "pageIn .28s cubic-bezier(.2,.7,.2,1)" }}
+      >
+        <div className="mb-3 flex items-start justify-between gap-4">
+          <h3 className="text-lg font-bold text-[var(--color-text)]">{title}</h3>
+          <button className="btn btn-ghost !px-2.5" onClick={onClose} aria-label="Close">
+            <Icon path={icons.close} size={18} />
+          </button>
+        </div>
+        {children}
+      </div>
+    </div>
+  );
+}
 
 // Page heading block used at the top of every content page.
 export function PageHeader({ icon, title, subtitle }) {
@@ -10,7 +49,7 @@ export function PageHeader({ icon, title, subtitle }) {
         </span>
       )}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">{title}</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)] sm:text-3xl">{title}</h1>
         {subtitle && <p className="mt-1 text-sm text-[var(--color-mist)]">{subtitle}</p>}
       </div>
     </div>

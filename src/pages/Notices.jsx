@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
 import { useCollection } from "../lib/useCollection.js";
-import { PageHeader, CategoryFilter, SearchInput, Loading, EmptyState, ErrorNote, Tag } from "../components/ui.jsx";
+import { PageHeader, CategoryFilter, SearchInput, Loading, EmptyState, ErrorNote, Tag, Modal } from "../components/ui.jsx";
+import Reveal from "../components/Reveal.jsx";
 import { Icon, icons } from "../components/Icons.jsx";
-import { fmtDate, relDate, label } from "../lib/format.js";
+import { fmtDate, relDate, label, isNew } from "../lib/format.js";
 
 const CATEGORIES = ["academic", "circular", "placement", "internship", "workshop"].map((v) => ({
   value: v,
@@ -13,6 +14,7 @@ export default function Notices() {
   const { rows, loading, error } = useCollection("notices");
   const [cat, setCat] = useState("all");
   const [q, setQ] = useState("");
+  const [active, setActive] = useState(null);
 
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
@@ -39,30 +41,48 @@ export default function Notices() {
         <EmptyState>No notices match your filters.</EmptyState>
       ) : (
         <div className="space-y-3">
-          {filtered.map((n) => (
-            <article key={n.id} className="card">
-              <div className="flex flex-wrap items-start gap-2">
-                {n.is_pinned && (
-                  <span className="mt-0.5 text-[var(--color-signal)]" title="Pinned">
-                    <Icon path={icons.pin} size={16} />
-                  </span>
-                )}
-                <h3 className="flex-1 text-base font-semibold text-white">{n.title}</h3>
-                <Tag tone="signal">{label("category", n.category)}</Tag>
-              </div>
-              <p className="mt-2 text-sm leading-relaxed text-[var(--color-mist)]">{n.body}</p>
-              <div className="mt-3 flex items-center gap-4 text-xs text-[var(--color-mist)]">
-                <span>{fmtDate(n.published_at)} · {relDate(n.published_at)}</span>
-                {n.attachment_url && (
-                  <a href={n.attachment_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[var(--color-signal)] hover:underline">
-                    <Icon path={icons.download} size={14} /> Attachment
-                  </a>
-                )}
-              </div>
-            </article>
+          {filtered.map((n, i) => (
+            <Reveal key={n.id} delay={Math.min(i, 6) * 50}>
+              <article className="card cursor-pointer" onClick={() => setActive(n)}>
+                <div className="flex flex-wrap items-start gap-2">
+                  {n.is_pinned && (
+                    <span className="mt-0.5 text-[var(--color-signal)]" title="Pinned">
+                      <Icon path={icons.pin} size={16} />
+                    </span>
+                  )}
+                  <h3 className="flex-1 text-base font-semibold text-[var(--color-text)]">{n.title}</h3>
+                  {isNew(n.published_at) && <Tag tone="signal">NEW</Tag>}
+                  <Tag tone="signal">{label("category", n.category)}</Tag>
+                </div>
+                <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-[var(--color-mist)]">{n.body}</p>
+                <div className="mt-3 flex items-center gap-4 text-xs text-[var(--color-mist)]">
+                  <span>{fmtDate(n.published_at)} · {relDate(n.published_at)}</span>
+                  <span className="text-[var(--color-signal)]">Read more →</span>
+                </div>
+              </article>
+            </Reveal>
           ))}
         </div>
       )}
+
+      <Modal open={!!active} onClose={() => setActive(null)} title={active?.title}>
+        {active && (
+          <>
+            <div className="mb-3 flex flex-wrap items-center gap-2">
+              <Tag tone="signal">{label("category", active.category)}</Tag>
+              {active.is_pinned && <Tag>Pinned</Tag>}
+              {isNew(active.published_at) && <Tag tone="signal">NEW</Tag>}
+              <span className="text-xs text-[var(--color-mist)]">{fmtDate(active.published_at)}</span>
+            </div>
+            <p className="whitespace-pre-line text-sm leading-relaxed text-[var(--color-text)]">{active.body}</p>
+            {active.attachment_url && (
+              <a href={active.attachment_url} target="_blank" rel="noreferrer" className="btn btn-primary mt-5">
+                <Icon path={icons.download} size={16} /> Download attachment
+              </a>
+            )}
+          </>
+        )}
+      </Modal>
     </div>
   );
 }
